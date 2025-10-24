@@ -20,7 +20,7 @@ function GlobeComponent() {
       {
         lat: point.lat,
         lng: point.lng,
-        altitude: 1, // Closer zoom - reduced from 2.5 to 1.5
+        altitude: 0.5, // Closer zoom - reduced from 2.5 to 1.5
       },
       1500 // Slightly longer animation duration for smoother zoom
     );
@@ -66,27 +66,32 @@ function GlobeComponent() {
 
   useEffect(() => {
     setPlaces([
-      {
-        name: "Singapore",
-        lat: 1.3521,
-        lng: 103.8198,
-        color: "#ff6b35",
-        country: "Singapore",
-      },
-      {
-        name: "Japan",
-        lat: 36.2048,
-        lng: 138.2529,
-        color: "#3742fa",
-        country: "Japan",
-      },
-      {
-        name: "United States",
-        lat: 39.8283,
-        lng: -98.5795,
-        color: "#ff4757",
-        country: "USA",
-      },
+      { name: "Malta", lat: 35.9375, lng: 14.3754, color: "#ffa502" },
+      { name: "Barcelona", lat: 41.3851, lng: 2.1734, color: "#ff7f50" },
+      { name: "Paris", lat: 48.8566, lng: 2.3522, color: "#ff4757" },
+      { name: "London", lat: 51.5074, lng: -0.1278, color: "#70a1ff" },
+      { name: "Galway", lat: 53.2707, lng: -9.0568, color: "#5352ed" },
+      { name: "Vilnius", lat: 54.6872, lng: 25.2797, color: "#2ed573" },
+      { name: "Kaunas", lat: 54.8985, lng: 23.9036, color: "#7bed9f" },
+      { name: "Riga", lat: 56.9496, lng: 24.1052, color: "#1e90ff" },
+      { name: "Tallinn", lat: 59.437, lng: 24.7535, color: "#2f3542" },
+      { name: "Tirana", lat: 41.3275, lng: 19.8189, color: "#ff6348" },
+      { name: "Sarandë", lat: 39.8756, lng: 20.0055, color: "#ff9f43" },
+      { name: "Kotor", lat: 42.4247, lng: 18.7712, color: "#eccc68" },
+      { name: "Dubrovnik", lat: 42.6507, lng: 18.0944, color: "#70a1ff" },
+      { name: "Split", lat: 43.5081, lng: 16.4402, color: "#2ed573" },
+      { name: "Mostar", lat: 43.3438, lng: 17.8078, color: "#ff7f50" },
+      { name: "Žabljak", lat: 43.1556, lng: 19.1223, color: "#1e90ff" },
+
+      // 🇮🇹 Italy
+      { name: "Rome", lat: 41.9028, lng: 12.4964, color: "#ff9f1c" },
+      { name: "Florence", lat: 43.7696, lng: 11.2558, color: "#ff7f50" },
+      { name: "Venice", lat: 45.4408, lng: 12.3155, color: "#ffa502" },
+      { name: "Milan", lat: 45.4642, lng: 9.19, color: "#ff4757" },
+
+      // 🇵🇱 Poland
+      { name: "Kraków", lat: 50.0647, lng: 19.945, color: "#1e90ff" },
+      { name: "Zakopane", lat: 49.2992, lng: 19.9496, color: "#3742fa" },
     ]);
   }, []);
 
@@ -104,7 +109,6 @@ function GlobeComponent() {
         htmlLat={(d) => d.lat}
         htmlLng={(d) => d.lng}
         htmlElement={(d) => {
-          // Create a small marker for the country
           const marker = document.createElement("div");
           marker.onclick = () => handlePointClick(d);
           marker.style.width = "12px";
