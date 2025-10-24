@@ -1,171 +1,10 @@
 import Globe from "react-globe.gl";
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-
-// Constants
-const GLOBE_CONFIG = {
-  autoRotateSpeed: 0.1,
-  zoomAltitude: 1,
-  animationDuration: 1500,
-  autoRotateDelay: 5000,
-};
-
-const CLOUDS_CONFIG = {
-  imageUrl: "/clouds.png",
-  altitude: 0.004,
-  rotationSpeed: -0.006,
-};
-
-// Countries data
-const COUNTRIES_DATA = [
-  {
-    id: "singapore",
-    name: "Singapore",
-    lat: 1.3521,
-    lng: 103.8198,
-    color: "#ff6b35",
-    country: "Singapore",
-  },
-  {
-    id: "japan", 
-    name: "Japan",
-    lat: 36.2048,
-    lng: 138.2529,
-    color: "#3742fa",
-    country: "Japan",
-  },
-  {
-    id: "usa",
-    name: "United States",
-    lat: 39.8283,
-    lng: -98.5795,
-    color: "#ff4757",
-    country: "USA",
-  },
-];
-
-// Custom hook for globe controls
-const useGlobeControls = (globeRef) => {
-  const setupAutoRotation = useCallback(() => {
-    if (!globeRef.current) return;
-    
-    const controls = globeRef.current.controls();
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = GLOBE_CONFIG.autoRotateSpeed;
-  }, [globeRef]);
-
-  const disableAutoRotation = useCallback(() => {
-    if (!globeRef.current) return;
-    globeRef.current.controls().autoRotate = false;
-  }, [globeRef]);
-
-  const enableAutoRotation = useCallback(() => {
-    if (!globeRef.current) return;
-    globeRef.current.controls().autoRotate = true;
-  }, [globeRef]);
-
-  return { setupAutoRotation, disableAutoRotation, enableAutoRotation };
-};
-
-// Custom hook for clouds animation
-const useCloudsLayer = (globeRef) => {
-  useEffect(() => {
-    if (!globeRef.current) return;
-
-    const globe = globeRef.current;
-    
-    new THREE.TextureLoader().load(CLOUDS_CONFIG.imageUrl, (cloudsTexture) => {
-      const clouds = new THREE.Mesh(
-        new THREE.SphereGeometry(
-          globe.getGlobeRadius() * (1 + CLOUDS_CONFIG.altitude),
-          75,
-          75
-        ),
-        new THREE.MeshPhongMaterial({
-          map: cloudsTexture,
-          transparent: true,
-        })
-      );
-      globe.scene().add(clouds);
-
-      const rotateClouds = () => {
-        clouds.rotation.y += (CLOUDS_CONFIG.rotationSpeed * Math.PI) / 180;
-        requestAnimationFrame(rotateClouds);
-      };
-      rotateClouds();
-    });
-  }, [globeRef]);
-};
-
-// Marker component (React-friendly HTML element creator)
-const createMarkerElement = (data, onClickHandler) => {
-  const marker = document.createElement("div");
-  marker.style.cssText = `
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: ${data.color};
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    cursor: pointer;
-    pointer-events: auto;
-    transform: translate(-50%, -50%);
-    transition: all 0.3s ease;
-  `;
-
-  const container = document.createElement("div");
-  container.style.cssText = `
-    position: relative;
-    pointer-events: auto;
-  `;
-
-  const label = document.createElement("div");
-  label.textContent = data.name;
-  label.style.cssText = `
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0,0,0,0.8);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  `;
-
-  // Event listeners
-  const handleMouseEnter = () => {
-    marker.style.transform = "translate(-50%, -50%) scale(1.3)";
-    marker.style.boxShadow = "0 4px 8px rgba(0,0,0,0.4)";
-    label.style.opacity = "1";
-  };
-
-  const handleMouseLeave = () => {
-    marker.style.transform = "translate(-50%, -50%) scale(1)";
-    marker.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
-    label.style.opacity = "0";
-  };
-
-  const handleClick = () => onClickHandler(data);
-
-  marker.addEventListener("mouseenter", handleMouseEnter);
-  marker.addEventListener("mouseleave", handleMouseLeave);
-  marker.addEventListener("click", handleClick);
-
-  container.appendChild(marker);
-  container.appendChild(label);
-
-  return container;
-};
 
 function GlobeComponent() {
   const globeEl = useRef();
-  const [places] = useState(COUNTRIES_DATA);
+  const [places, setPlaces] = useState([]);
 
   // Function to handle point clicks and rotate globe
   const handlePointClick = (point) => {
@@ -256,7 +95,7 @@ function GlobeComponent() {
       <Globe
         ref={globeEl}
         animateIn={false}
-        globeImageUrl="world.200407.3x5400x2700.jpg"
+        globeImageUrl="earth.jpg"
         bumpImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png"
         backgroundImageUrl="stars.jpg"
         showAtmosphere={true}
