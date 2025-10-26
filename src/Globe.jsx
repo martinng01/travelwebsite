@@ -8,40 +8,25 @@ function GlobeComponent() {
 
   // Function to handle point clicks and rotate globe
   const handlePointClick = (point) => {
-    console.log("hi");
-
     const globe = globeEl.current;
-
-    // Temporarily disable auto-rotation
-    globe.controls().autoRotate = false;
-
     // Smoothly rotate and zoom to the clicked point
     globe.pointOfView(
       {
         lat: point.lat,
         lng: point.lng,
-        altitude: 0.5, // Closer zoom - reduced from 2.5 to 1.5
+        altitude: 0.2, // Closer zoom - reduced from 2.5 to 1.5
       },
       1500 // Slightly longer animation duration for smoother zoom
     );
-
-    // Re-enable auto-rotation after a longer delay to enjoy the zoomed view
-    setTimeout(() => {
-      globe.controls().autoRotate = true;
-    }, 5000);
   };
 
   useEffect(() => {
     const globe = globeEl.current;
 
-    // Auto-rotate
-    globe.controls().autoRotate = true;
-    globe.controls().autoRotateSpeed = 0.1;
-
     // Add clouds layer
     const CLOUDS_IMG_URL = "/clouds.png";
     const CLOUDS_ALT = 0.004;
-    const CLOUDS_ROTATION_SPEED = -0.006; // deg/frame
+    const CLOUDS_ROTATION_SPEED = -0.002; // deg/frame
 
     new THREE.TextureLoader().load(CLOUDS_IMG_URL, (cloudsTexture) => {
       const clouds = new THREE.Mesh(
@@ -66,6 +51,17 @@ function GlobeComponent() {
 
   useEffect(() => {
     setPlaces([
+      // 🌏 Asia
+      { name: "Bangkok", lat: 13.7563, lng: 100.5018, color: "#ff9f1c" },
+      { name: "Istanbul", lat: 41.0082, lng: 28.9784, color: "#70a1ff" },
+      { name: "Cappadocia", lat: 38.6431, lng: 34.8273, color: "#5352ed" },
+      { name: "Taiwan", lat: 23.6978, lng: 120.9605, color: "#ffa502" },
+      { name: "Chongqing", lat: 29.4316, lng: 106.9123, color: "#2ed573" },
+      { name: "Chengdu", lat: 30.5728, lng: 104.0668, color: "#1e90ff" },
+      { name: "Kota Kinabalu", lat: 5.9804, lng: 116.0735, color: "#eccc68" },
+      { name: "Kundasang", lat: 5.989, lng: 116.593, color: "#ff7f50" },
+
+      // 🇪🇺 Europe
       { name: "Malta", lat: 35.9375, lng: 14.3754, color: "#ffa502" },
       { name: "Barcelona", lat: 41.3851, lng: 2.1734, color: "#ff7f50" },
       { name: "Paris", lat: 48.8566, lng: 2.3522, color: "#ff4757" },
@@ -82,14 +78,10 @@ function GlobeComponent() {
       { name: "Split", lat: 43.5081, lng: 16.4402, color: "#2ed573" },
       { name: "Mostar", lat: 43.3438, lng: 17.8078, color: "#ff7f50" },
       { name: "Žabljak", lat: 43.1556, lng: 19.1223, color: "#1e90ff" },
-
-      // 🇮🇹 Italy
       { name: "Rome", lat: 41.9028, lng: 12.4964, color: "#ff9f1c" },
       { name: "Florence", lat: 43.7696, lng: 11.2558, color: "#ff7f50" },
       { name: "Venice", lat: 45.4408, lng: 12.3155, color: "#ffa502" },
       { name: "Milan", lat: 45.4642, lng: 9.19, color: "#ff4757" },
-
-      // 🇵🇱 Poland
       { name: "Kraków", lat: 50.0647, lng: 19.945, color: "#1e90ff" },
       { name: "Zakopane", lat: 49.2992, lng: 19.9496, color: "#3742fa" },
     ]);
