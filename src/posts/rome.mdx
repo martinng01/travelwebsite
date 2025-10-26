@@ -1,19 +1,28 @@
 ---
 title: "Wandering Through Rome"
-heroImage: "/images/rome-hero.jpeg"
+heroImage: "/images/rome-hero.jpg"
 ---
 
-import { PostHero } from "../components/PostHero";
-import { ContentImage } from "../components/ContentImage";
+import { Hero } from "../components/Hero";
+import { PostImage } from "../components/PostImage";
+import { Card, Button, Text } from "@mantine/core";
 
-<PostHero title="Wandering Through Rome" image="/images/rome-hero.jpeg" />
+<Hero title="Wandering Through Rome" image="/images/rome-hero.jpeg" />
 
-Rome’s streets are full of history, espresso smells, and cobblestones that have seen centuries pass.
+Rome’s streets are full of history, espresso smells, and centuries-old cobblestones.
 
-<ContentImage src="/images/rome-colosseum.jpg" alt="Colosseum" />
+<PostImage src="/images/rome-colosseum.jpg" alt="Colosseum" />
 
-Hidden fountains appear in quiet alleys, waiting for you to discover them.
+<Card shadow="sm" padding="lg" radius="md" withBorder className="my-6">
+  <Text weight={500}>Discover Hidden Fountains</Text>
+  <Text size="sm" color="dimmed">
+    Hidden fountains appear in quiet alleys, waiting for you to discover them.
+  </Text>
+  <Button variant="outline" mt="sm">
+    Learn More
+  </Button>
+</Card>
 
-<ContentImage src="/images/rome-fountain.jpg" alt="Fountain" side={true} />
+<PostImage src="/images/rome-fountain.jpg" alt="Fountain" side={true} />
 
-Watching the sunset over the city skyline is magical, painting the horizon with gold and pink hues.
+<Button />
