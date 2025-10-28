@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { Container } from "@mantine/core";
 
 export default function PostPage() {
   const { slug } = useParams();
@@ -7,7 +8,9 @@ export default function PostPage() {
 
   return (
     <React.Suspense fallback={<p>Loading...</p>}>
-      <Post />
+      <Container size="xl">
+        <Post />
+      </Container>
     </React.Suspense>
   );
 }
