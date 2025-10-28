@@ -1,12 +1,27 @@
 import Globe from "react-globe.gl";
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { Drawer, Loader, Text } from "@mantine/core";
+
+function slugify(name = "") {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
 
 function GlobeComponent() {
   const globeEl = useRef();
   const [places, setPlaces] = useState([]);
 
-  // Function to handle point clicks and rotate globe
+  // Drawer state
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedSlug, setSelectedSlug] = useState(null);
+  const [PostComponent, setPostComponent] = useState(null);
+  const [loadingPost, setLoadingPost] = useState(false);
+  const [postError, setPostError] = useState(null);
+
+  // Function to handle point clicks and rotate globe. Also open drawer for place.
   const handlePointClick = (point) => {
     const globe = globeEl.current;
     // Smoothly rotate and zoom to the clicked point
@@ -14,16 +29,21 @@ function GlobeComponent() {
       {
         lat: point.lat,
         lng: point.lng,
-        altitude: 0.2, // Closer zoom - reduced from 2.5 to 1.5
+        altitude: 0.2,
       },
-      1500 // Slightly longer animation duration for smoother zoom
+      1500
     );
+
+    // Compute slug from name and open drawer
+    const slug = slugify(point.name || "");
+    setSelectedSlug(slug);
+    setDrawerOpen(true);
   };
 
+  // Load clouds once
   useEffect(() => {
     const globe = globeEl.current;
 
-    // Add clouds layer
     const CLOUDS_IMG_URL = "/clouds.png";
     const CLOUDS_ALT = 0.004;
     const CLOUDS_ROTATION_SPEED = -0.002; // deg/frame
@@ -49,6 +69,7 @@ function GlobeComponent() {
     });
   }, []);
 
+  // Places data
   useEffect(() => {
     setPlaces([
       // 🌏 Asia
@@ -86,6 +107,41 @@ function GlobeComponent() {
       { name: "Zakopane", lat: 49.2992, lng: 19.9496, color: "#3742fa" },
     ]);
   }, []);
+
+  // When selectedSlug changes, try to dynamically import the post (if it exists)
+  useEffect(() => {
+    if (!selectedSlug) {
+      setPostComponent(null);
+      setPostError(null);
+      return;
+    }
+
+    let mounted = true;
+    setLoadingPost(true);
+    setPostError(null);
+    setPostComponent(null);
+
+    import(`./posts/${selectedSlug}.mdx`)
+      .then((mod) => {
+        if (!mounted) return;
+        // Some bundlers expose the component as default, or as the module itself
+        const Comp = mod && (mod.default || mod);
+        setPostComponent(() => Comp);
+      })
+      .catch((err) => {
+        if (!mounted) return;
+        console.warn("Post import failed:", err);
+        setPostError("Post not found");
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setLoadingPost(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [selectedSlug]);
 
   return (
     <div className="w-screen h-screen">
@@ -165,6 +221,31 @@ function GlobeComponent() {
         htmlTransitionDuration={1000}
         onHtmlElementClick={handlePointClick}
       />
+
+      <Drawer
+        opened={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        position="right"
+        size="xl"
+        padding="md"
+        // withCloseButton
+        // zIndex={1000}
+      >
+        {loadingPost ? (
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <Loader />
+            <Text>Loading post...</Text>
+          </div>
+        ) : postError ? (
+          <Text>{postError}</Text>
+        ) : PostComponent ? (
+          <div style={{ overflowY: "auto", maxHeight: "100%" }}>
+            <PostComponent />
+          </div>
+        ) : (
+          <Text>Select a place with a post to view details.</Text>
+        )}
+      </Drawer>
     </div>
   );
 }

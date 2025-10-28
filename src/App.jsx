@@ -1,16 +1,18 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PostPage from "./pages/[slug]";
-import { Header } from "./components/Header.jsx";
+import { CustomMDXProvider } from "./MDXProvider.jsx";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/posts/:slug" element={<PostWrapper />} />
-        <Route path="/" element={<GlobeComponent />} />
-      </Routes>
-    </BrowserRouter>
+    <CustomMDXProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/posts/:slug" element={<PostWrapper />} />
+          <Route path="/" element={<GlobeComponent />} />
+        </Routes>
+      </BrowserRouter>
+    </CustomMDXProvider>
   );
 }
 
