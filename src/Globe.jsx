@@ -21,6 +21,16 @@ function GlobeComponent() {
   const [loadingPost, setLoadingPost] = useState(false);
   const [postError, setPostError] = useState(null);
 
+  useEffect(() => {
+    // Disable scrolling when component mounts
+    document.body.style.overflow = "hidden";
+
+    // Cleanup function to re-enable scrolling when component unmounts
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   // Function to handle point clicks and rotate globe. Also open drawer for place.
   const handlePointClick = (point) => {
     const globe = globeEl.current;
@@ -37,13 +47,10 @@ function GlobeComponent() {
     // Compute slug from name and open drawer
     const slug = slugify(point.name || "");
     setSelectedSlug(slug);
-    setDrawerOpen(true);
+    setTimeout(() => {
+      setDrawerOpen(true);
+    }, 1000);
   };
-
-  const handleWheel = (event) => {
-    event.preventDefault();
-  };
-
   // Load clouds once
   useEffect(() => {
     const globe = globeEl.current;
@@ -157,7 +164,6 @@ function GlobeComponent() {
         backgroundImageUrl="stars.jpg"
         showAtmosphere={true}
         atmosphereAltitude={0.25}
-        onWheel={handleWheel}
         htmlElementsData={places}
         htmlLat={(d) => d.lat}
         htmlLng={(d) => d.lng}
@@ -234,7 +240,7 @@ function GlobeComponent() {
         offset={8}
         radius="md"
         position="right"
-        size="xl"
+        size={1000}
         padding="md"
       >
         {loadingPost ? (

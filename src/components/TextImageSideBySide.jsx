@@ -1,26 +1,19 @@
 import { Grid, Text, Image, Container } from "@mantine/core";
 
-export function TextImageSideBySide({
+export default function TextImageSideBySide({
   children,
-  imageSrc,
-  imageAlt = "Image",
+  src,
   textSize = "md",
-  imageHeight = 400,
+  h = 600,
 }) {
   return (
-    <Container px={0} py="xl">
+    <Container px={0} my="xl" h={600} mx={0} size="100%">
       <Grid align="flex-start" gutter="xl">
         <Grid.Col span={{ base: 12, md: 6 }}>
           <Text size={textSize}>{children}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            radius="md"
-            h={imageHeight}
-            fit="cover"
-          />
+          <Image src={src} radius="md" h={h} />
         </Grid.Col>
       </Grid>
     </Container>

@@ -4,13 +4,19 @@ import { Container, Image } from "@mantine/core";
 
 export default function ImageCarousel({
   images,
-  height = 400,
+  height = 600,
   withIndicators = true,
   radius = "md",
 }) {
   return (
-    <Container px={0} py="xl">
-      <Carousel withIndicators={withIndicators} height={height}>
+    <Container px={0} py="xl" h={600} mx={0} size="100%">
+      <Carousel
+        withIndicators={withIndicators}
+        height={height}
+        emblaOptions={{
+          loop: true,
+        }}
+      >
         {images.map((src, index) => (
           <Carousel.Slide key={index}>
             <Image
