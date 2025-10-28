@@ -40,6 +40,10 @@ function GlobeComponent() {
     setDrawerOpen(true);
   };
 
+  const handleWheel = (event) => {
+    event.preventDefault();
+  };
+
   // Load clouds once
   useEffect(() => {
     const globe = globeEl.current;
@@ -153,6 +157,7 @@ function GlobeComponent() {
         backgroundImageUrl="stars.jpg"
         showAtmosphere={true}
         atmosphereAltitude={0.25}
+        onWheel={handleWheel}
         htmlElementsData={places}
         htmlLat={(d) => d.lat}
         htmlLng={(d) => d.lng}
