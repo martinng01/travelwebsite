@@ -8,9 +8,7 @@ export default function PostPage() {
 
   return (
     <React.Suspense fallback={<p>Loading...</p>}>
-      <Container size="xl">
-        <Post />
-      </Container>
+      <Post />
     </React.Suspense>
   );
 }

@@ -1,7 +1,7 @@
 import Globe from "react-globe.gl";
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { Drawer, Loader, Text } from "@mantine/core";
+import { Drawer, Loader, Text, Container } from "@mantine/core";
 
 function slugify(name = "") {
   return name
@@ -241,19 +241,16 @@ function GlobeComponent() {
         radius="md"
         position="right"
         size={1000}
-        padding="md"
       >
         {loadingPost ? (
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Container>
             <Loader />
             <Text>Loading post...</Text>
-          </div>
+          </Container>
         ) : postError ? (
           <Text>{postError}</Text>
         ) : PostComponent ? (
-          <div style={{ overflowY: "auto", maxHeight: "100%" }}>
-            <PostComponent />
-          </div>
+          <PostComponent />
         ) : (
           <Text>Select a place with a post to view details.</Text>
         )}
