@@ -225,11 +225,12 @@ function GlobeComponent() {
       <Drawer
         opened={drawerOpen}
         onClose={() => setDrawerOpen(false)}
+        withCloseButton={false}
+        offset={8}
+        radius="md"
         position="right"
         size="xl"
         padding="md"
-        // withCloseButton
-        // zIndex={1000}
       >
         {loadingPost ? (
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
