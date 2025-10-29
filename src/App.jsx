@@ -1,7 +1,8 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
 import PostPage from "./pages/[slug]";
 import { CustomMDXProvider } from "./MDXProvider.jsx";
+import GlobeComponent from "./components/Globe/GlobeComponent.jsx";
 
 function App() {
   return (
@@ -16,9 +17,6 @@ function App() {
   );
 }
 
-// Simple wrapper to extract slug from URL
-import { useParams } from "react-router-dom";
-import GlobeComponent from "./Globe";
 const PostWrapper = () => {
   const { slug } = useParams();
   return <PostPage slug={slug} />;
