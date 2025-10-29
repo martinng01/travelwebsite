@@ -14,6 +14,26 @@ function GlobeComponent() {
   const globeEl = useRef();
   const [places, setPlaces] = useState([]);
 
+  const globeContainerRef = useRef(null);
+
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+
+  // Update size when window resizes
+  useEffect(() => {
+    function updateSize() {
+      if (globeContainerRef.current) {
+        setWidth(globeContainerRef.current.offsetWidth);
+        setHeight(globeContainerRef.current.offsetHeight);
+      }
+    }
+
+    updateSize(); // Initial
+    window.addEventListener("resize", updateSize);
+
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
   // Drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedSlug, setSelectedSlug] = useState(null);
@@ -155,9 +175,11 @@ function GlobeComponent() {
   }, [selectedSlug]);
 
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen" ref={globeContainerRef}>
       <Globe
         ref={globeEl}
+        width={width}
+        height={height}
         animateIn={false}
         globeImageUrl="earth.jpg"
         bumpImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png"
